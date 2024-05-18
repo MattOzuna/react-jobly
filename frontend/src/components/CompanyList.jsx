@@ -40,7 +40,7 @@ const CompanyList = () => {
           ></Form.Control>
         </Form>
       </Row>
-      <Row className="justify-content-center">
+      <Container className="justify-content-center">
         {isLoading && touched ? (
           <Spinner animation="border" role="status">
             {" "}
@@ -50,7 +50,7 @@ const CompanyList = () => {
         {companies.map((company) => (
           <CompanyCard company={company} key={company.handle} />
         ))}
-      </Row>
+      </Container>
     </Container>
   );
 
