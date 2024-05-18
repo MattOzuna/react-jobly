@@ -2,10 +2,9 @@ import { Redirect, useParams } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import { useEffect, useState } from "react";
-import JoblyApi from "../api/api";
+import JoblyApi from "../../api/api";
 import Spinner from "react-bootstrap/Spinner";
-import JobCard from "./JobCard";
-import { Route } from "react-router-dom/cjs/react-router-dom.min";
+import JobCard from "../jobs/JobCard";
 import Row from "react-bootstrap/Row";
 
 const CompanyDetails = ({ companies, cantFind }) => {
@@ -32,6 +31,7 @@ const CompanyDetails = ({ companies, cantFind }) => {
   return (
     <Container className="justify-content-md-center">
       <Row>
+        <h2 className="my-3">Company Details</h2>
         <Card>
           <Card.Body>
             <Card.Title>{company.name}</Card.Title>
@@ -39,7 +39,7 @@ const CompanyDetails = ({ companies, cantFind }) => {
           </Card.Body>
         </Card>
       </Row>
-      {company.jobs.length !== 0 ? <h2>Available Jobs</h2>: null}
+      {company.jobs.length !== 0 ? <h2 className="my-3">Available Jobs</h2>: null}
       <Row className="justify-content-center">
         {company.jobs.map((job) => (
           <JobCard job={job} key={job.id}/>

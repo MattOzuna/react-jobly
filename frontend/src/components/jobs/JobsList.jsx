@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 import { useState, useEffect } from "react";
-import JoblyApi from "../api/api";
+import JoblyApi from "../../api/api";
 import JobCard from "./JobCard";
 
 const Jobs = () => {

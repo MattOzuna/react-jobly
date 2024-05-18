@@ -1,7 +1,5 @@
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import ListGroup from 'react-bootstrap/ListGroup';
-
 
 const CompanyCard = ({ company }) => {
   return (

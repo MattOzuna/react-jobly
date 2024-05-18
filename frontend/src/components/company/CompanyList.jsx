@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 import { useState, useEffect } from "react";
-import JoblyApi from "../api/api";
+import JoblyApi from "../../api/api";
 import CompanyCard from "./CompanyCard";
 
 const CompanyList = () => {
@@ -15,7 +15,7 @@ const CompanyList = () => {
   const handleChange = (e) => {
     setTouched(true);
     setSearch(e.target.value ? { name: e.target.value } : {});
-    setCompanies([])
+    setCompanies([]);
   };
 
   useEffect(() => {
@@ -53,14 +53,6 @@ const CompanyList = () => {
       </Container>
     </Container>
   );
-
-  // if (isLoading) {
-  //   return (
-  //     <Spinner animation="border" role="status">
-  //       <span className="visually-hidden">Loading...</span>
-  //     </Spinner>
-  //   );
-  // }
 };
 
 export default CompanyList;

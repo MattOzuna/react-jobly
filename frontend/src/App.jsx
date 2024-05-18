@@ -1,43 +1,62 @@
 import "./App.css";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { useEffect, useState } from "react";
-import JoblyApi from "./api/api";
-import Home from "./components/Home";
-import CompanyList from "./components/CompanyList";
-import JobsList from "./components/JobsList";
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import { useState } from "react";
+import { UserContext } from "./components/auth/UserContext";
 import Navbar from "./components/Navbar";
-import CompanyDetails from "./components/CompanyDetails";
+import Home from "./components/Home";
+import CompanyList from "./components/company/CompanyList";
+import CompanyDetails from "./components/company/CompanyDetails";
+import JobsList from "./components/jobs/JobsList";
+import LoginForm from "./components/auth/LoginForm";
+import SignupForm from "./components/auth/SignupForm";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
+  const [userData, setUserData] = useState({});
 
+  const login = (token) => setUserData({ token });
+
+  const register = (token) => setUserData({ token });
+
+  const logout = () => {
+    setUserData({});
+  };
 
   return (
     <>
       <div className="app" data-bs-theme="dark">
-        <BrowserRouter>
-          <Navbar />
-          <main className="main">
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/companies">
-                <CompanyList/>
-              </Route>
-              <Route exact path="/jobs">
-                <JobsList />
-              </Route>
-              <Route exact path="/companies/:handle">
-                <CompanyDetails />
-              </Route>
-              <Route>
-                <p className="text-warning font-weight-bold">
-                  Hmmm. I can't seem to find what you want.
-                </p>
-              </Route>
-            </Switch>
-          </main>
-        </BrowserRouter>
+        <UserContext.Provider value={{ userData, logout }}>
+          <BrowserRouter>
+            <Navbar />
+            <main className="main">
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <ProtectedRoute exact path="/companies">
+                  <CompanyList />
+                </ProtectedRoute>
+                <ProtectedRoute exact path="/jobs">
+                  <JobsList />
+                </ProtectedRoute>
+                <ProtectedRoute exact path="/companies/:handle">
+                  <CompanyDetails />
+                </ProtectedRoute>
+                <Route exact path="/login">
+                  <LoginForm login={login} />
+                </Route>
+                <Route exact path="/register">
+                  <SignupForm register={register} />
+                </Route>
+                <Route>
+                  <p className="text-warning font-weight-bold">
+                    Hmmm. I can't seem to find what you want.
+                  </p>
+                </Route>
+              </Switch>
+            </main>
+          </BrowserRouter>
+        </UserContext.Provider>
       </div>
     </>
   );
