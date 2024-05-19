@@ -10,9 +10,10 @@ import JobsList from "./components/jobs/JobsList";
 import LoginForm from "./components/auth/LoginForm";
 import SignupForm from "./components/auth/SignupForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import useLocalStorageState from "./hooks/useLocalStorageState";
 
 function App() {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useLocalStorageState('token');
 
   const login = (token) => setUserData({ token });
 

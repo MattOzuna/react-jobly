@@ -1,4 +1,4 @@
-import { Redirect, useParams } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import Spinner from "react-bootstrap/Spinner";
 import JobCard from "../jobs/JobCard";
 import Row from "react-bootstrap/Row";
 
-const CompanyDetails = ({ companies, cantFind }) => {
+const CompanyDetails = () => {
   const { handle } = useParams();
   const [company, setCompany] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -39,10 +39,12 @@ const CompanyDetails = ({ companies, cantFind }) => {
           </Card.Body>
         </Card>
       </Row>
-      {company.jobs.length !== 0 ? <h2 className="my-3">Available Jobs</h2>: null}
+      {company.jobs.length !== 0 ? (
+        <h2 className="my-3">Available Jobs</h2>
+      ) : null}
       <Row className="justify-content-center">
         {company.jobs.map((job) => (
-          <JobCard job={job} key={job.id}/>
+          <JobCard job={job} key={job.id} />
         ))}
       </Row>
     </Container>
