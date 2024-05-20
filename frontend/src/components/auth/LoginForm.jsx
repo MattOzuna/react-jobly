@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import JoblyApi from "../../api/api";
 import { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { v4 as uuidv4 } from "uuid";
 
 const LoginForm = ({ login }) => {
   const history = useHistory();
@@ -20,10 +21,10 @@ const LoginForm = ({ login }) => {
     e.preventDefault();
     try {
       let res = await JoblyApi.getToken(formData);
-      await login(res);
+      await login(res, formData.username);
       history.push("/");
     } catch (err) {
-      setErrors(err);
+      setErrors(err.message ? ["Unkown Issue. Try again later."] : err);
     }
   };
 
@@ -50,6 +51,7 @@ const LoginForm = ({ login }) => {
         <Form.Label>Password</Form.Label>
         <Form.Control
           required
+          minLength="5"
           type="password"
           name="password"
           placeholder="Password"

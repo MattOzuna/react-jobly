@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import JoblyApi from "../api/api";
 
 const useLocalStorageState = (key) => {
   const [value, setValue] = useState(() => {
     try{
       let val = JSON.parse(window.localStorage.getItem(key)) || {};
+      JoblyApi.token = val.token
       return val;
     } catch (err){
       console.error(`issue with ${key}`, err)

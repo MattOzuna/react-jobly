@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = import.meta.env.REACT_BASE_URL || "http://localhost:3001";
+// const BASE_URL = "http://localhost:3001"
 
 /** API Class.
  *
@@ -57,15 +57,31 @@ class JoblyApi {
     return res.job;
   }
 
+  static async getUser(username) {
+    let res = await this.request(`users/${username}`);
+    return res.user;
+  }
+
+  static async editUser(username, data) {
+    let res = await this.request(`users/${username}`, data, "patch");
+    return res.user;
+  }
+
+  static async applyToJob(username, jobId) {
+    const data = {}
+    let res = await this.request(`users/${username}/jobs/${jobId}`, data, "post");
+    return res.applied;
+  }
+
   static async getToken(data) {
-    let res = await this.request('auth/token', data, "post")
-    JoblyApi.token = res.token
+    let res = await this.request("auth/token", data, "post");
+    JoblyApi.token = res.token ? res.token : null;
     return res.token;
   }
 
   static async registerNewUser(data) {
-    let res = await this.request('auth/register', data, "post")
-    JoblyApi.token = res.token
+    let res = await this.request("auth/register", data, "post");
+    JoblyApi.token = res.token;
     return res.token;
   }
 }

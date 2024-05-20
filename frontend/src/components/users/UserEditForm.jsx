@@ -2,15 +2,27 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import JoblyApi from "../../api/api";
-import { useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Spinner from "react-bootstrap/Spinner";
+import { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { v4 as uuidv4 } from "uuid";
+import JoblyApi from "../../api/api";
 
-const SignupForm = ({ register }) => {
+const UserEditForm = () => {
+  const { username } = useParams();
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
+
+  useEffect(() => {
+    const fetchUser = async (username) => {
+      let {email, lastName, firstName} = await JoblyApi.getUser(username);
+      setFormData({email, lastName, firstName});
+      setIsLoading(false);
+    };
+    fetchUser(username);
+  }, [isLoading]);
 
   const handleChange = (e) => {
     setFormData((formData) => ({
@@ -22,17 +34,24 @@ const SignupForm = ({ register }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await JoblyApi.registerNewUser(formData);
-      await register(res, formData.username);
-      history.push("/");
+        let res = await JoblyApi.editUser(username, formData)
+        history.push(`/users/${username}`)
     } catch (err) {
-      setErrors(err.message ? ['Unkown Issue. Try again later.'] : err);
+      setErrors(err.message ? ["Unkown Issue. Try again later."] : err);
     }
   };
 
+  if (isLoading) {
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
+  }
+
   return (
     <Form className="" onSubmit={handleSubmit}>
-      <h2 className="my-4">Sign up</h2>
+      <h2 className="my-4">Edit Profile</h2>
       {errors.map((error) => (
         <div className="text-danger" key={uuidv4()}>
           {error}
@@ -42,19 +61,10 @@ const SignupForm = ({ register }) => {
         <Form.Label>Email address:</Form.Label>
         <Form.Control
           required
+          value={formData.email}
           name="email"
           type="email"
           placeholder="name@example.com"
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3 mx-auto" controlId="username">
-        <Form.Label>Username:</Form.Label>
-        <Form.Control
-          required
-          name="username"
-          type="text"
-          placeholder="Username"
           onChange={handleChange}
         />
       </Form.Group>
@@ -62,7 +72,6 @@ const SignupForm = ({ register }) => {
         <Form.Label>Password:</Form.Label>
         <Form.Control
           required
-          minLength="5"
           name="password"
           type="password"
           placeholder="Password"
@@ -75,6 +84,7 @@ const SignupForm = ({ register }) => {
             <Form.Label>First Name:</Form.Label>
             <Form.Control
               required
+              value={formData.firstName}
               name="firstName"
               type="text"
               placeholder="First Name"
@@ -87,6 +97,7 @@ const SignupForm = ({ register }) => {
             <Form.Label>Last Name:</Form.Label>
             <Form.Control
               required
+              value={formData.lastName}
               name="lastName"
               type="text"
               placeholder="Last Name"
@@ -102,4 +113,4 @@ const SignupForm = ({ register }) => {
   );
 };
 
-export default SignupForm;
+export default UserEditForm;

@@ -41,6 +41,9 @@ function NavBar() {
         </Nav>
 
         <Nav className="justify-content-end">
+          <NavLink className="navbar-brand" to={`/users/${userData.username}`}>
+            {userData.username}
+          </NavLink>
           <Nav.Link onClick={logout}>Logout</Nav.Link>
           <NavLink className="nav-link" to="/companies">
             Companies
